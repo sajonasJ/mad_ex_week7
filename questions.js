@@ -46,7 +46,8 @@
  */
 
 function abbreviateName(name) {
-  // Implementation using regular expression
+  let string = name.trim().split(/\s+/);
+  return `${string.pop()}, ${string.map(string => string[0].toUpperCase() + '.').join(' ')}`;
 }
 
 /**
@@ -73,8 +74,13 @@ function abbreviateName(name) {
  * isValidAustralianMobile("0312345678") returns false (Incorrect prefix)
  */
 function isValidAustralianMobile(number) {
-  // Implementation using regular expression
+  const cleanedNumber = number.replace(/\D/g, "");
+
+  // Check if the number starts with '04' and has 10 digits
+  const regex = /^(?:\(\s?04\s?\)|04)(?:\s?\d){8}$/;
+  return regex.test(cleanedNumber);
 }
+
 
 /**
  * Question 3: Function Reflection and Dynamic Creation
@@ -95,12 +101,16 @@ function isValidAustralianMobile(number) {
  */
 
 function describeFunction(func) {
-  // Your implementation here
+  return `${func.name} is a function expecting ${func.length} parameters.`;
 }
 
 function createFunction(name, length) {
-  // Your implementation here (optional exercise)
+  let params = [...Array(length).keys()].map(i => `arg${i}`);
+  let func = new Function(...params, `console.log("${name} function called with ${length} parameters.")`);
+  Object.defineProperty(func, 'name', { value: name });
+  return func;
 }
+
 /**
  * Question 4: Using Function Methods - Apply and Call
  *
@@ -120,7 +130,7 @@ function createFunction(name, length) {
  *   should return [6, 6] because both 'apply' and 'call' should give the same result.
  */
 function invokeWithApplyAndCall(func, context, argsArray) {
-  // Your implementation here
+  return [func.apply(context, argsArray), func.call(context, ...argsArray)];
 }
 
 /**
@@ -140,7 +150,7 @@ function invokeWithApplyAndCall(func, context, argsArray) {
  * - boundAdd(10) should return 15, as the first argument is bound to 5.
  */
 function bindFunction(func, context, ...boundArgs) {
-  // Your implementation here
+  return func.bind(context, ...boundArgs);
 }
 
 module.exports = {
